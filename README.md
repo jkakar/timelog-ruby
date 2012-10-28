@@ -1,6 +1,46 @@
 A command-line driven time-tracking tool inspired by GTimeLog.
 
-= Introduction
+= Usage
+
+This simple command line tool is inspired by GTimeLog:
+
+  http://mg.pov.lt/gtimelog/
+
+It behaves almost the same way, but has a command-line interface,
+instead of a graphical UI.
+
+== Starting the day
+
+Start the day by typing *Arrived* to start the clock.
+
+```bash
+timelog "Arrived"
+```
+
+== Switching activities
+
+When you switch to an activity, tell the timelog what you were doing
+before you start the new activity:
+
+```bash
+timelog "Reading mail"
+```
+
+== Slacking
+
+If you don't want the activity you were doing to count as time spent
+working use two asterisks to mark it as slacking:
+
+```bash
+timelog "Lunch **"
+```
+
+== Status update
+
+Running the `timelog` command by itself will print a simple report
+showing you what you've done, how many hours you've worked and how
+many hours you have left before the day is over.  Slacking activities
+aren't included in the totals.
 
 
 = License
