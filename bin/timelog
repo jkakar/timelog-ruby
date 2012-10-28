@@ -1,5 +1,7 @@
 #!/usr/bin/env ruby
 
+$:.unshift(File.expand_path(File.join(File.dirname($0), "../lib")))
 require 'timelog/cli'
 
-Timelog::CLI.start(*ARGV)
+client = Timelog::CLI.new(File.open(File.expand_path('~/.timelog.txt'), 'a+'))
+client.run(*ARGV)

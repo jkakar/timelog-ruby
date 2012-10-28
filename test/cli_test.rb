@@ -13,15 +13,21 @@ class CLITest < MiniTest::Unit::TestCase
     @client = Timelog::CLI.new(@stream)
   end
 
-  # CLI#start writes the specified activity to the stream.
-  def test_start_with_first_activity
-    @client.start('Writing a test')
+  # CLI#run writes the specified activity to the stream.
+  def test_run_with_first_activity
+    @client.run('Writing a test')
     assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Writing a test\n/,
                  @stream.string)
   end
 
-  # CLI#start raises an ArgumentError if no arguments are provided.
-  def test_start_without_arguments
-    assert_raises(ArgumentError) { @client.start() }
+  # CLI#run raises a UsageError if -h or --help arguments are specified.
+  def test_run_with_help_option
+    assert_raises(Timelog::UsageError) { @client.run('-h') }
+    assert_raises(Timelog::UsageError) { @client.run('--help') }
+  end
+
+  # CLI#run raises an ArgumentError if no arguments are provided.
+  def test_run_without_arguments
+    assert_raises(ArgumentError) { @client.run }
   end
 end

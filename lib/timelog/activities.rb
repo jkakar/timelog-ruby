@@ -4,7 +4,7 @@ require 'date'
 module Timelog
   # A timelog keeps tracks of activities that occur over time.  Existing
   # activities are loaded from the stream and new ones are appended to it.
-  class Timelog
+  class Activities
     # A new day starts at 4:00am in the morning.
     DAY_BOUNDARY_HOUR = 4
 

@@ -3,13 +3,13 @@ require 'minitest/autorun'
 require 'minitest/pride'
 require 'stringio'
 
-require 'timelog/timelog'
+require 'timelog/activities'
 
 
-class TimelogTest < MiniTest::Unit::TestCase
+class ActivitiesTest < MiniTest::Unit::TestCase
   def setup
     @stream = StringIO.new
-    @timelog = Timelog::Timelog.new(@stream)
+    @timelog = Timelog::Activities.new(@stream)
   end
 
   # Timelog#initialize loads activities from the stream.  This is essentially
@@ -21,7 +21,7 @@ class TimelogTest < MiniTest::Unit::TestCase
   # Timelog#initialize loads activities from the stream.
   def test_initialize_loads_activities_from_stream
     stream = StringIO.new("2012-01-31 10:59: Writing a test\n")
-    timelog = Timelog::Timelog.new(stream)
+    timelog = Timelog::Activities.new(stream)
     timestamp = DateTime.new(2012, 1, 31, 10, 59)
     assert_equal([{timestamp: timestamp, description: 'Writing a test'}],
                  timelog.activities)
@@ -30,14 +30,14 @@ class TimelogTest < MiniTest::Unit::TestCase
   # Timelog#initialize ignores empty lines when reading from the stream.
   def test_initialize_ignores_empty_lines
     stream = StringIO.new("\n\n\n")
-    timelog = Timelog::Timelog.new(stream)
+    timelog = Timelog::Activities.new(stream)
     assert_equal([], timelog.activities)
   end
 
   # Timelog#initialize ignores malformed lines when reading from the stream.
   def test_initialize_ignores_malformed_lines
     stream = StringIO.new("This isn't a valid activity line\n")
-    timelog = Timelog::Timelog.new(stream)
+    timelog = Timelog::Activities.new(stream)
     assert_equal([], timelog.activities)
   end
 
@@ -64,8 +64,8 @@ class TimelogTest < MiniTest::Unit::TestCase
     @timelog.record_activity('Writing a test', yesterday)
     today = DateTime.new(2012, 1, 31, 4) # Today at 4:00am
     @timelog.record_activity('Writing another test', today)
-    assert_equal("2012-01-31 03:59: Writing a test\n" +
-                 "\n" +
+    assert_equal("2012-01-31 03:59: Writing a test\n" <<
+                 "\n" <<
                  "2012-01-31 04:00: Writing another test\n",
                  @stream.string)
   end
@@ -78,8 +78,8 @@ class TimelogTest < MiniTest::Unit::TestCase
     @timelog.record_activity('Writing a test', yesterday)
     today = DateTime.new(2012, 1, 31, 15) # Today at 3:00pm
     @timelog.record_activity('Writing another test', today)
-    assert_equal("2012-01-29 12:00: Writing a test\n" +
-                 "\n" +
+    assert_equal("2012-01-29 12:00: Writing a test\n" <<
+                 "\n" <<
                  "2012-01-31 15:00: Writing another test\n",
                  @stream.string)
   end
@@ -91,7 +91,7 @@ class TimelogTest < MiniTest::Unit::TestCase
     @timelog.record_activity('Writing a test', today1)
     today2 = DateTime.new(2012, 1, 31, 15, 5) # Today at 3:05pm
     @timelog.record_activity('Writing another test', today2)
-    assert_equal("2012-01-31 15:00: Writing a test\n" +
+    assert_equal("2012-01-31 15:00: Writing a test\n" <<
                  "2012-01-31 15:05: Writing another test\n",
                  @stream.string)
   end
