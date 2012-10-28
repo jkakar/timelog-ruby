@@ -2,9 +2,6 @@ require 'date'
 
 
 module Timelog
-  # Raised if a line representing activity can't be parsed.
-  class ParseError < StandardError; end
-
   # A timelog keeps tracks of activities that occur over time.  Existing
   # activities are loaded from the stream and new ones are appended to it.
   class Timelog

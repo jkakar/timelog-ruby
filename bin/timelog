@@ -1,5 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'timelog'
+require 'timelog/cli'
 
-Timelog::CLI::start(ARGV)
+Timelog::CLI.start(*ARGV)

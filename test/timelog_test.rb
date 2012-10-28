@@ -34,6 +34,13 @@ class TimelogTest < MiniTest::Unit::TestCase
     assert_equal([], timelog.activities)
   end
 
+  # Timelog#initialize ignores malformed lines when reading from the stream.
+  def test_initialize_ignores_malformed_lines
+    stream = StringIO.new("This isn't a valid activity line\n")
+    timelog = Timelog::Timelog.new(stream)
+    assert_equal([], timelog.activities)
+  end
+
   # Timelog#record_activity writes the specified description to the timelog
   # stream, along with the current date and time.
   def test_record_activity
