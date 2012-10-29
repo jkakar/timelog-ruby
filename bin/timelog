@@ -6,7 +6,7 @@ require 'timelog/cli'
 
 client = Timelog::CLI.new(File.open(File.expand_path('~/.timelog.txt'), 'a+'))
 begin
-  client.run(*ARGV)
+  client.run(*ARGV, $stdout)
 rescue Timelog::UsageError => error
   puts error
 end

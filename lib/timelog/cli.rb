@@ -16,17 +16,18 @@ module Timelog
   end
 
   # Command-line client parses and validates arguments and writes activity
-  # data to the stream.
+  # data to the activity stream.  Reporting and other information for the user
+  # is written to the output stream.
   class CLI
-    def initialize(stream)
+    def initialize(stream, output)
       @stream = stream
+      @output = output
     end
 
     # Parse command-line arguments and perform the requested operation.
     def run(*args)
       options, args = parse_command_line_options!(args)
       if args.empty?
-        raise ArgumentError.new('You must specify an activity description.')
       else
         Activities.new(@stream).record_activity(args[0])
       end

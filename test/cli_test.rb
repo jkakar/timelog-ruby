@@ -1,6 +1,5 @@
 require 'date'
 require 'minitest/autorun'
-require 'minitest/autorun'
 require 'minitest/pride'
 require 'stringio'
 
@@ -10,7 +9,8 @@ require 'timelog/cli'
 class CLITest < MiniTest::Unit::TestCase
   def setup
     @stream = StringIO.new
-    @client = Timelog::CLI.new(@stream)
+    @output = StringIO.new
+    @client = Timelog::CLI.new(@stream, @output)
   end
 
   # CLI#run writes the specified activity to the stream.
@@ -26,8 +26,25 @@ class CLITest < MiniTest::Unit::TestCase
     assert_raises(Timelog::UsageError) { @client.run('--help') }
   end
 
-  # CLI#run raises an ArgumentError if no arguments are provided.
+  # CLI#run displays today's activities when no arguments are specified.
   def test_run_without_arguments
-    assert_raises(ArgumentError) { @client.run }
+    @client.run
+    assert_equal('', @output.string)
+  end
+end
+
+
+class UsageError < MiniTest::Unit::TestCase
+  # Converting a UsageError to a string yield help text to display to a user.
+  def test_to_s
+    client = Timelog::CLI.new(StringIO.new, StringIO.new)
+    begin
+      client.run('-h')
+    rescue Timelog::UsageError => error
+      assert_equal(
+        "Usage: turn [options]\n" <<
+        "    -h, --help                       Display this screen\n",
+        error.to_s)
+    end
   end
 end
