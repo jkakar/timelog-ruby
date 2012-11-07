@@ -6,10 +6,10 @@ module Timelog
   module DailyReport
     # Generate a report based on today's activities and write it to the output
     # stream.
-    def self.render(activities, output, today=nil)
+    def self.render(timelog, output, today=nil)
       today ||= DateTime.now
-      all_activities = collect_activities(activities, today)
-      pp all_activities
+      activities = collect_activities(timelog, today)
+      pp activities
       # all_activities.each do |activity|
       #   output.puts('')
       # end
@@ -19,8 +19,8 @@ module Timelog
 
     private
 
-    def self.collect_activities(activities, today)
-      activities.activities.select do |activity|
+    def self.collect_activities(timelog, today)
+      timelog.activities.select do |activity|
         activity if (activity[:timestamp].year == today.year &&
                      activity[:timestamp].month == today.month &&
                      activity[:timestamp].day == today.day)

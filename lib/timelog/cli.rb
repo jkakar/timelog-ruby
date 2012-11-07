@@ -1,6 +1,6 @@
 require 'optparse'
 
-require 'timelog/activities'
+require 'timelog/timelog'
 
 
 module Timelog
@@ -27,9 +27,8 @@ module Timelog
     # Parse command-line arguments and perform the requested operation.
     def run(*args)
       options, args = parse_command_line_options!(args)
-      if args.empty?
-      else
-        Activities.new(@stream).record_activity(args[0])
+      unless args.empty?
+        Timelog.new(@stream).record_activity(args[0])
       end
     end
 

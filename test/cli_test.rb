@@ -1,6 +1,5 @@
 require 'date'
-require 'minitest/autorun'
-require 'minitest/pride'
+require 'minitest/unit'
 require 'stringio'
 
 require 'timelog/cli'

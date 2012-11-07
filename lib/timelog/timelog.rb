@@ -4,7 +4,7 @@ require 'date'
 module Timelog
   # A timelog keeps tracks of activities that occur over time.  Existing
   # activities are loaded from the stream and new ones are appended to it.
-  class Activities
+  class Timelog
     # A new day starts at 4:00am in the morning.
     DAY_BOUNDARY_HOUR = 4
 
@@ -12,8 +12,7 @@ module Timelog
 
     def initialize(stream)
       @activities = []
-      @stream = stream
-      @stream.each do |line|
+      @stream = stream.each do |line|
         activity = parse_activity_line(line)
         @activities << activity unless activity.nil?
       end
