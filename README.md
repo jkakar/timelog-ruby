@@ -13,31 +13,31 @@ instead of a graphical UI.
 
 Start the day by typing *Arrived* to start the clock.
 
-```bash
-timelog "Arrived"
-```
+    ```bash
+    bin/timelog "Arrived"
+    ```
 
 ### Switching activities
 
 When you switch to an activity, tell the timelog what you were doing
 before you start the new activity:
 
-```bash
-timelog "Reading mail"
-```
+    ```bash
+    bin/timelog "Reading mail"
+    ```
 
 ### Slacking
 
 If you don't want the activity you were doing to count as time spent
 working use two asterisks to mark it as slacking:
 
-```bash
-timelog "Lunch **"
-```
+    ```bash
+    bin/timelog "Lunch **"
+    ```
 
 ### Status update
 
-Running the `timelog` command by itself will print a simple report
+Running the `bin/timelog` command by itself will print a simple report
 showing you what you've done, how many hours you've worked and how
 many hours you have left before the day is over.  Slacking activities
 aren't included in the totals.

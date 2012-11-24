@@ -11,25 +11,37 @@ module Timelog
     attr_reader :activities
 
     def initialize(activities, stream)
-      @activities = []
+      @activities = activities
       @stream = stream
     end
 
     # Write an activity to the timelog stream.
-    def record_activity(description, timestamp=nil)
-      timestamp ||= Time.now
+    def record_activity(description, end_time=nil)
+      end_time ||= Time.now
 
       previous_activity = @activities[-1]
+      start_time = nil
       unless previous_activity.nil?
-        if (timestamp - previous_activity[:timestamp] > 1 ||
-            (previous_activity[:timestamp].hour < DAY_BOUNDARY_HOUR &&
-             timestamp.hour >= DAY_BOUNDARY_HOUR))
-          @stream.puts('')
+        previous_end_time = previous_activity[:end_time]
+        if (more_than_a_day_passed?(end_time, previous_end_time) ||
+            crossed_day_change_boundary?(end_time, previous_end_time))
+          @stream.puts ''
         end
+        start_time = previous_end_time
       end
+      @stream.puts("#{end_time.strftime '%Y-%m-%d %H:%M'}: #{description}")
+      @activities << {:start_time => start_time, :end_time => end_time,
+                      :description => description}
+    end
 
-      @stream.puts("#{timestamp.strftime '%Y-%m-%d %H:%M'}: #{description}")
-      @activities << {timestamp: timestamp, description: description}
+    private
+
+    def more_than_a_day_passed?(end_time, previous_end_time)
+      end_time - previous_end_time > 60 * 60 * 24
+    end
+
+    def crossed_day_change_boundary?(end_time, previous_end_time)
+      previous_end_time.hour < 4 && end_time.hour >= 4
     end
   end
 
@@ -44,7 +56,7 @@ module Timelog
       else
         item = result[0]
         end_time = Time.new(item[0].to_i, item[1].to_i, item[2].to_i,
-                             item[3].to_i, item[4].to_i)
+                            item[3].to_i, item[4].to_i)
         description = item[5]
         if start_time.nil?
           start_time = end_time
