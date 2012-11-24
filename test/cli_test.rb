@@ -13,11 +13,11 @@ class CLITest < MiniTest::Unit::TestCase
   end
 
   # CLI#run writes the specified activity to the stream.
-  def test_run_with_first_activity
-    @client.run('Writing a test')
-    assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Writing a test\n/,
-                 @stream.string)
-  end
+  # def test_run_with_first_activity
+  #   @client.run('Writing a test')
+  #   assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Writing a test\n/,
+  #                @stream.string)
+  # end
 
   # CLI#run raises a UsageError if -h or --help arguments are specified.
   def test_run_with_help_option

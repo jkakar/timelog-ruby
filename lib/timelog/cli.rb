@@ -37,17 +37,12 @@ module Timelog
     # Parse command-line arguments and return an options object and a list of
     # remaining arguments.
     def parse_command_line_options!(args)
-      options = {}
       OptionParser.new do |opts|
-        # TODO: Put command-line options here
-
-        # This displays the help screen, all programs are
-        # assumed to have this option.
         opts.on('-h', '--help', 'Display this screen') do
           raise UsageError.new(opts)
         end
       end.parse!(args)
-      return options, args
+      return {}, args
     end
   end
 end
