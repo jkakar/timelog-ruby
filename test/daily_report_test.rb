@@ -27,8 +27,8 @@ class DailyReportTest < MiniTest::Unit::TestCase
                  @output.string)
   end
 
-  # Timelog::DailyReport.render writes a basic report, containing activities
-  # from the specified day, to the output stream.
+  # Timelog::DailyReport.render writes a simple report of activities from the
+  # specified day, sorted alphabetically, to the output stream.
   def test_render
     yesterday1 = Time.new(2012, 1, 30, 14, 15) # Yesterday at 1:19pm
     @timelog.record_activity('Arrived', yesterday1)
@@ -39,10 +39,10 @@ class DailyReportTest < MiniTest::Unit::TestCase
     today2 = Time.new(2012, 1, 31, 15, 5) # Today at 3:05pm
     @timelog.record_activity('Writing a test', today2)
     today3 = Time.new(2012, 1, 31, 15, 12) # Today at 3:12pm
-    @timelog.record_activity('Writing another test', today3)
+    @timelog.record_activity('Reading mail', today3)
     Timelog::DailyReport.render(@timelog, @output, Time.new(2012, 1, 31))
-    assert_equal("0 h 05 min   Writing a test\n" <<
-                 "0 h 07 min   Writing another test\n" <<
+    assert_equal("0 h 07 min   Reading mail\n" <<
+                 "0 h 05 min   Writing a test\n" <<
                  "\n" <<
                  "Total work done:    0 h 12 min\n" <<
                  "Time left at work:  7 h 48 min\n",
