@@ -28,7 +28,9 @@ class CLITest < MiniTest::Unit::TestCase
   # CLI#run displays today's activities when no arguments are specified.
   def test_run_without_arguments
     @client.run
-    assert_equal('', @output.string)
+    assert_equal("Total work done:    0 h 00 min\n" <<
+                 "Time left at work:  8 h 00 min\n",
+                 @output.string)
   end
 end
 

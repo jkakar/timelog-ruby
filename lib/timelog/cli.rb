@@ -1,5 +1,6 @@
 require 'optparse'
 
+require 'timelog/daily_report'
 require 'timelog/timelog'
 
 
@@ -27,8 +28,10 @@ module Timelog
     # Parse command-line arguments and perform the requested operation.
     def run(*args)
       options, args = parse_command_line_options!(args)
-      unless args.empty?
-        timelog = ::Timelog::load_stream(@stream)
+      timelog = ::Timelog::load_stream(@stream)
+      if args.empty?
+        DailyReport::render(timelog, @output, Time.new(2012, 11, 23))
+      else
         timelog.record_activity(args[0])
       end
     end

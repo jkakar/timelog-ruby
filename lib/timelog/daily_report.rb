@@ -11,14 +11,14 @@ module Timelog
       activities.each do |activity|
         duration = format_duration(activity[:duration])
         description = activity[:description]
-        output.puts("#{duration}    #{description}")
+        output.puts("#{duration}   #{description}")
       end
       time_spent = 0
       time_left = (8 * 60 * 60)
       unless activities.empty?
-        output.puts("\n")
         time_spent = activities.map { |a| a[:duration] }.reduce(:+)
         time_left = (8 * 60 * 60) - time_spent
+        output.puts("\n")
       end
       output.puts("Total work done:    #{format_duration(time_spent)}")
       output.puts("Time left at work:  #{format_duration(time_left)}")

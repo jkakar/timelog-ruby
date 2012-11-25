@@ -41,8 +41,8 @@ class DailyReportTest < MiniTest::Unit::TestCase
     today3 = Time.new(2012, 1, 31, 15, 12) # Today at 3:12pm
     @timelog.record_activity('Writing another test', today3)
     Timelog::DailyReport.render(@timelog, @output, Time.new(2012, 1, 31))
-    assert_equal("0 h 05 min    Writing a test\n" <<
-                 "0 h 07 min    Writing another test\n" <<
+    assert_equal("0 h 05 min   Writing a test\n" <<
+                 "0 h 07 min   Writing another test\n" <<
                  "\n" <<
                  "Total work done:    0 h 12 min\n" <<
                  "Time left at work:  7 h 48 min\n",
