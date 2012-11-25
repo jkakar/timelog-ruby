@@ -30,7 +30,7 @@ module Timelog
       options, args = parse_command_line_options!(args)
       timelog = ::Timelog::load_stream(@stream)
       if args.empty?
-        DailyReport::render(timelog, @output, Time.new(2012, 11, 23))
+        DailyReport::render(timelog, @output)
       else
         timelog.record_activity(args[0])
       end
