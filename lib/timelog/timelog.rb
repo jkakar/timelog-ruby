@@ -1,4 +1,3 @@
-require 'ostruct'
 require 'time'
 
 module Timelog
