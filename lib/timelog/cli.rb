@@ -28,7 +28,8 @@ module Timelog
     def run(*args)
       options, args = parse_command_line_options!(args)
       unless args.empty?
-        Timelog.new(@stream).record_activity(args[0])
+        timelog = ::Timelog::load_stream(@stream)
+        timelog.record_activity(args[0])
       end
     end
 

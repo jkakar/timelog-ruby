@@ -74,50 +74,73 @@ class TimelogTest < MiniTest::Unit::TestCase
   end
 
   # Timelog::Timelog#record_activity writes the specified description to the
-  # activity stream, along with the current date and time.
+  # activity stream, along with the current date and time.  The first activity
+  # in a day is used to establish the start time, so nothing is added to the
+  # list of activities.
   def test_record_activity
-    @timelog.record_activity('Writing a test')
+    @timelog.record_activity('Arrived')
     @stream.rewind
-    assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Writing a test\n/,
+    assert_equal([], @timelog.activities)
+    assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Arrived\n/,
                  @stream.read)
   end
 
   # Timelog::Timelog#record_activity formats the activity timestamp in
-  # YYYY-MM-DD HH:MM format.  An explicit Time timestamp can optionally be
+  # YYYY-MM-DD HH:MM format.  An explicit timestamp can optionally be
   # provided.
   def test_record_activity_formats_date
-    timestamp = Time.new(2012, 1, 31, 10, 59)
-    @timelog.record_activity('Writing a test', timestamp)
+    timestamp1 = Time.new(2012, 1, 31, 8, 34)
+    @timelog.record_activity('Arrived', timestamp1)
+    timestamp2 = Time.new(2012, 1, 31, 10, 59)
+    @timelog.record_activity('Reading mail', timestamp2)
     @stream.rewind
-    assert_equal("2012-01-31 10:59: Writing a test\n", @stream.read)
+    assert_equal([{:start_time => timestamp1, :end_time => timestamp2,
+                    :description => 'Reading mail'}],
+                 @timelog.activities)
+    assert_equal("2012-01-31 08:34: Arrived\n" <<
+                 "2012-01-31 10:59: Reading mail\n",
+                 @stream.read)
   end
 
   # Timelog::Timelog#record_activity writes a blank line to separate
   # activities that occur on different days.  A new days starts at 4am.
   def test_record_activity_detects_day_boundaries
-    yesterday = Time.new(2012, 1, 31, 3, 59) # Yesterday at 3:59am
-    @timelog.record_activity('Writing a test', yesterday)
+    yesterday1 = Time.new(2012, 1, 31, 3, 47) # Yesterday at 3:47am
+    @timelog.record_activity('Arrived', yesterday1)
+    yesterday2 = Time.new(2012, 1, 31, 3, 59) # Yesterday at 3:59am
+    @timelog.record_activity('Writing a test', yesterday2)
     today = Time.new(2012, 1, 31, 4) # Today at 4:00am
-    @timelog.record_activity('Writing another test', today)
+    @timelog.record_activity('Arrived', today)
     @stream.rewind
-    assert_equal("2012-01-31 03:59: Writing a test\n" <<
+    assert_equal([{:start_time => Time.new(2012, 1, 31, 3, 47),
+                    :end_time => Time.new(2012, 1, 31, 3, 59),
+                    :description => 'Writing a test'}],
+                 @timelog.activities)
+    assert_equal("2012-01-31 03:47: Arrived\n" <<
+                 "2012-01-31 03:59: Writing a test\n" <<
                  "\n" <<
-                 "2012-01-31 04:00: Writing another test\n",
+                 "2012-01-31 04:00: Arrived\n",
                  @stream.read)
-  end
+ end
 
   # Timelog::Timelog#record_activity writes a blank line to separate
   # activities that occur on different days.  Day change detection works
   # correctly when more than 24 hours has passed since the last activity.
   def test_record_activity_detects_multiple_day_boundaries
-    yesterday = Time.new(2012, 1, 29, 12) # Two days ago at 12:00pm
-    @timelog.record_activity('Writing a test', yesterday)
-    today = Time.new(2012, 1, 31, 15) # Today at 3:00pm
-    @timelog.record_activity('Writing another test', today)
+    yesterday1 = Time.new(2012, 1, 29, 11) # Two days ago at 11:00am
+    @timelog.record_activity('Arrived', yesterday1)
+    yesterday2 = Time.new(2012, 1, 29, 12) # Two days ago at 12:00pm
+    @timelog.record_activity('Reading mail', yesterday2)
+    today1 = Time.new(2012, 1, 31, 15) # Today at 3:00pm
+    @timelog.record_activity('Arrived', today1)
+    today2 = Time.new(2012, 1, 31, 16) # Today at 4:00pm
+    @timelog.record_activity('Reading mail', today2)
     @stream.rewind
-    assert_equal("2012-01-29 12:00: Writing a test\n" <<
+    assert_equal("2012-01-29 11:00: Arrived\n" <<
+                 "2012-01-29 12:00: Reading mail\n" <<
                  "\n" <<
-                 "2012-01-31 15:00: Writing another test\n",
+                 "2012-01-31 15:00: Arrived\n" <<
+                 "2012-01-31 16:00: Reading mail\n",
                  @stream.read)
   end
 

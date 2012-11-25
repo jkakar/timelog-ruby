@@ -13,35 +13,62 @@ module Timelog
     def initialize(activities, stream)
       @activities = activities
       @stream = stream
+      @next_start_time = nil
     end
 
     # Write an activity to the timelog stream.
     def record_activity(description, end_time=nil)
       end_time ||= Time.now
-
-      previous_activity = @activities[-1]
-      start_time = nil
-      unless previous_activity.nil?
-        previous_end_time = previous_activity[:end_time]
-        if (more_than_a_day_passed?(end_time, previous_end_time) ||
-            crossed_day_change_boundary?(end_time, previous_end_time))
-          @stream.puts ''
-        end
-        start_time = previous_end_time
+      start_time = get_start_time(end_time)
+      if start_time.nil?
+        @next_start_time = end_time
+        write_separator unless @activities.empty?
+      else
+        @activities << {:start_time => start_time, :end_time => end_time,
+                        :description => description}
       end
-      @stream.puts("#{end_time.strftime '%Y-%m-%d %H:%M'}: #{description}")
-      @activities << {:start_time => start_time, :end_time => end_time,
-                      :description => description}
+      write_activity(end_time, description)
     end
 
     private
 
-    def more_than_a_day_passed?(end_time, previous_end_time)
-      end_time - previous_end_time > 60 * 60 * 24
+    # Get the start time from the last activity or nil if one isn't available
+    # or if the end time is the first of the day.
+    def get_start_time(end_time)
+      start_time = @next_start_time
+      if start_time.nil?
+        start_time = @activities[-1][:end_time] unless @activities.empty?
+      end
+
+      if start_time && (more_than_a_day_passed?(start_time, end_time) ||
+                        crossed_day_change_boundary?(start_time, end_time))
+        start_time = nil
+      end
+
+      @next_start_time = nil
+      start_time
     end
 
-    def crossed_day_change_boundary?(end_time, previous_end_time)
-      previous_end_time.hour < 4 && end_time.hour >= 4
+    # True if a more than a day has passed between the current time and
+    # previous time.
+    def more_than_a_day_passed?(start_time, end_time)
+      end_time - start_time > 60 * 60 * 24
+    end
+
+    # True if the current time has crossed the day boundary since the previous
+    # time.
+    def crossed_day_change_boundary?(start_time, end_time)
+      start_time.hour < 4 && end_time.hour >= 4
+    end
+
+    # Write an activity to the stream.
+    def write_activity(end_time, description)
+      @stream.puts("#{end_time.strftime '%Y-%m-%d %H:%M'}: #{description}")
+    end
+
+    # Write a day separator to the stream.
+    def write_separator
+      @stream.puts('')
     end
   end
 
