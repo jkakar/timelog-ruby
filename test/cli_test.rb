@@ -12,20 +12,22 @@ class CLITest < MiniTest::Unit::TestCase
     @client = Timelog::CLI.new(@stream, @output)
   end
 
-  # CLI#run writes the specified activity to the stream.
+  # Timeout::CLI#run writes the specified activity to the stream.
   def test_run_with_first_activity
     @client.run('Writing a test')
     assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Writing a test\n/,
                  @stream.string)
   end
 
-  # CLI#run raises a UsageError if -h or --help arguments are specified.
+  # Timeout::CLI#run raises a UsageError if -h or --help arguments are
+  # specified.
   def test_run_with_help_option
     assert_raises(Timelog::UsageError) { @client.run('-h') }
     assert_raises(Timelog::UsageError) { @client.run('--help') }
   end
 
-  # CLI#run displays today's activities when no arguments are specified.
+  # Timeout::CLI#run displays today's activities when no arguments are
+  # specified.
   def test_run_without_arguments
     @client.run
     assert_equal("Total work done:    0 h 00 min\n" <<
@@ -36,7 +38,8 @@ end
 
 
 class UsageError < MiniTest::Unit::TestCase
-  # Converting a UsageError to a string yield help text to display to a user.
+  # Converting a Timeout::UsageError to a string yield help text to display to
+  # a user.
   def test_to_s
     client = Timelog::CLI.new(StringIO.new, StringIO.new)
     begin

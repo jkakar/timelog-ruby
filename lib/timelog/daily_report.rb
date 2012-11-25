@@ -16,8 +16,12 @@ module Timelog
       time_spent = 0
       time_left = (8 * 60 * 60)
       unless activities.empty?
-        time_spent = activities.map { |a| a[:duration] }.reduce(:+)
+        time_spent = activities.map do |a|
+          a[:duration] unless a[:description].end_with?('**')
+        end
+        time_spent = time_spent.compact.reduce(:+)
         time_left = (8 * 60 * 60) - time_spent
+        time_left = 0 if time_left < 0
         output.puts("\n")
       end
       output.puts("Total work done:    #{format_duration(time_spent)}")
@@ -28,7 +32,8 @@ module Timelog
 
     # Get the activities for the day.
     def self.collect_activities(timelog, today)
-      activities = timelog.activities.collect do |activity|
+      # Find activities matching the specified day.
+      result = timelog.activities.collect do |activity|
         if (activity[:start_time].year == today.year &&
             activity[:start_time].month == today.month &&
             activity[:start_time].day == today.day)
@@ -36,7 +41,25 @@ module Timelog
             :description => activity[:description]}
         end
       end
-      activities.compact
+
+      # Eliminate duplicates.
+      activities = {}
+      result.compact.each do |activity|
+        duration = activity[:duration]
+        description = activity[:description]
+        if activities.has_key?(description)
+          activities[description] += duration
+        else
+          activities[description] = duration
+        end
+      end
+
+      # Return a list of unique activities for the day.
+      result = []
+      activities.each do |description, duration|
+        result << {:duration => duration, :description => description}
+      end
+      result.sort_by { |activity| activity[:description] }
     end
 
     def self.format_duration(seconds)
