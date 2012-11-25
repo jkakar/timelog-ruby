@@ -29,11 +29,8 @@ module Timelog
     def run(*args)
       options, args = parse_command_line_options!(args)
       timelog = ::Timelog::load_stream(@stream)
-      if args.empty?
-        DailyReport::render(timelog, @output, Time.new(2012, 11, 23))
-      else
-        timelog.record_activity(args[0])
-      end
+      timelog.record_activity(args[0]) unless args.empty?
+      DailyReport::render(timelog, @output)
     end
 
     private
