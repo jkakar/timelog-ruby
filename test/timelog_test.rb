@@ -60,6 +60,15 @@ class LoadTimelogTest < MiniTest::Unit::TestCase
     timelog = Timelog.load_stream(@stream)
     assert_equal([], timelog.activities)
   end
+
+  # Timelog#load_timelog doesn't load activities if there's only an entry to
+  # signal the start time for a day.
+  def test_load_stream_with_starting_activity
+    @stream.write("2012-01-31 10:52: Arrived\n")
+    @stream.rewind
+    timelog = Timelog.load_stream(@stream)
+    assert_equal([], timelog.activities)
+  end
 end
 
 class TimelogTest < MiniTest::Unit::TestCase

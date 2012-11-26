@@ -62,6 +62,7 @@ module Timelog
       result.sort_by { |activity| activity[:description] }
     end
 
+    # Convert seconds to a '1 h 23 min' text format.
     def self.format_duration(seconds)
       hours = 0
       minutes = seconds / 60
