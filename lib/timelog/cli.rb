@@ -1,5 +1,6 @@
 require 'optparse'
 
+require 'timelog/daily_report'
 require 'timelog/timelog'
 
 
@@ -27,9 +28,9 @@ module Timelog
     # Parse command-line arguments and perform the requested operation.
     def run(*args)
       options, args = parse_command_line_options!(args)
-      unless args.empty?
-        Timelog.new(@stream).record_activity(args[0])
-      end
+      timelog = ::Timelog::load_stream(@stream)
+      timelog.record_activity(args[0]) unless args.empty?
+      DailyReport::render(timelog, @output)
     end
 
     private
@@ -37,17 +38,12 @@ module Timelog
     # Parse command-line arguments and return an options object and a list of
     # remaining arguments.
     def parse_command_line_options!(args)
-      options = {}
       OptionParser.new do |opts|
-        # TODO: Put command-line options here
-
-        # This displays the help screen, all programs are
-        # assumed to have this option.
         opts.on('-h', '--help', 'Display this screen') do
           raise UsageError.new(opts)
         end
       end.parse!(args)
-      return options, args
+      return {}, args
     end
   end
 end
