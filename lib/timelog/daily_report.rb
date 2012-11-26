@@ -38,7 +38,7 @@ module Timelog
             activity[:start_time].month == today.month &&
             activity[:start_time].day == today.day)
           {:duration => activity[:end_time] - activity[:start_time],
-            :description => activity[:description]}
+           :description => activity[:description]}
         end
       end
 
