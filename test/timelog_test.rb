@@ -191,8 +191,8 @@ class TimelogTest < MiniTest::Unit::TestCase
                  @stream.read)
   end
 
-  # Timelog::Timelo#record_activity correctly writes the first activity of the
-  # day after loading the stream.
+  # Timelog::Timelog#record_activity correctly writes the first activity of
+  # the day after loading the stream.
   def test_record_activity_with_starting_activity_appended_to_loaded_stream
     @stream.write("2012-01-31 10:52: Arrived\n" <<
                   "2012-01-31 10:59: Writing a test\n")
@@ -212,8 +212,8 @@ class TimelogTest < MiniTest::Unit::TestCase
                  @stream.read)
   end
 
-  # Timelog::Timelo#record_activity correctly writes the first activity of the
-  # day after loading the stream.
+  # Timelog::Timelog#record_activity correctly writes the first activity of
+  # the day after loading the stream.
   def test_record_activity_with_activity_appended_to_loaded_stream
     @stream.write("2012-01-31 10:52: Arrived\n" <<
                   "2012-01-31 10:59: Writing a test\n" <<
