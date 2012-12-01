@@ -130,7 +130,7 @@ class TimelogTest < MiniTest::Unit::TestCase
                  "\n" <<
                  "2012-01-31 04:00: Arrived\n",
                  @stream.read)
- end
+  end
 
   # Timelog::Timelog#record_activity correctly detects day changes when the
   # previous time is after 4am on the previous day.
@@ -151,7 +151,7 @@ class TimelogTest < MiniTest::Unit::TestCase
                  "\n" <<
                  "2012-01-31 04:00: Arrived\n",
                  @stream.read)
- end
+  end
 
   # Timelog::Timelog#record_activity writes a blank line to separate
   # activities that occur on different days.  Day change detection works
