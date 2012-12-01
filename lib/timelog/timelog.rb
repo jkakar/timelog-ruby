@@ -32,7 +32,9 @@ module Timelog
     private
 
     # Get the start time from the last activity or nil if one isn't available
-    # or if the end time is the first of the day.
+    # or if the end time is the first of the day.  If this is the first
+    # activity, after starting the day, the @next_start_time queued from the
+    # starting activity is used.
     def get_start_time(end_time)
       start_time = @next_start_time
       if start_time.nil?
@@ -44,6 +46,7 @@ module Timelog
         start_time = nil
       end
 
+      # Reset the next start time since, if it existed, it's now been used.
       @next_start_time = nil
       start_time
     end
@@ -57,7 +60,8 @@ module Timelog
     # True if the current time has crossed the day boundary since the previous
     # time.
     def crossed_day_change_boundary?(start_time, end_time)
-      start_time.hour < 4 && end_time.hour >= 4
+      start_time.day != end_time.day ||
+        (start_time.hour < 4 && end_time.hour >= 4)
     end
 
     # Write an activity to the stream.

@@ -132,6 +132,27 @@ class TimelogTest < MiniTest::Unit::TestCase
                  @stream.read)
  end
 
+  # Timelog::Timelog#record_activity correctly detects day changes when the
+  # previous time is after 4am on the previous day.
+  def test_record_activity_detects_day_boundaries_across_midnight
+    yesterday1 = Time.new(2012, 1, 30, 20, 47) # Yesterday at 8:47pm
+    @timelog.record_activity('Arrived', yesterday1)
+    yesterday2 = Time.new(2012, 1, 30, 20, 59) # Yesterday at 8:59pm
+    @timelog.record_activity('Writing a test', yesterday2)
+    today = Time.new(2012, 1, 31, 4) # Today at 4:00am
+    @timelog.record_activity('Arrived', today)
+    @stream.rewind
+    assert_equal([{:start_time => Time.new(2012, 1, 30, 20, 47),
+                    :end_time => Time.new(2012, 1, 30, 20, 59),
+                    :description => 'Writing a test'}],
+                 @timelog.activities)
+    assert_equal("2012-01-30 20:47: Arrived\n" <<
+                 "2012-01-30 20:59: Writing a test\n" <<
+                 "\n" <<
+                 "2012-01-31 04:00: Arrived\n",
+                 @stream.read)
+ end
+
   # Timelog::Timelog#record_activity writes a blank line to separate
   # activities that occur on different days.  Day change detection works
   # correctly when more than 24 hours has passed since the last activity.
