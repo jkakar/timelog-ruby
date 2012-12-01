@@ -9,10 +9,10 @@ module Timelog
 
     attr_reader :activities
 
-    def initialize(activities, stream)
+    def initialize(activities, stream, next_start_time=nil)
       @activities = activities
       @stream = stream
-      @next_start_time = nil
+      @next_start_time = next_start_time
     end
 
     # Write an activity to the timelog stream.
@@ -97,7 +97,7 @@ module Timelog
         end
       end
     end
-    Timelog.new(activities, stream)
+    Timelog.new(activities, stream, start_time)
   end
 
   private
