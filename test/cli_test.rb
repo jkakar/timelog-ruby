@@ -18,8 +18,9 @@ class CLITest < MiniTest::Unit::TestCase
     @client.run('Writing a test')
     assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Writing a test\n/,
                  @stream.string)
-    assert_equal("Total work done:    0 h 00 min\n" <<
-                 "Time left at work:  8 h 00 min\n",
+    assert_equal("Time spent working:   0 h 00 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    8 h 00 min\n",
                  @output.string)
   end
 
@@ -34,8 +35,9 @@ class CLITest < MiniTest::Unit::TestCase
   # specified.
   def test_run_without_arguments
     @client.run
-    assert_equal("Total work done:    0 h 00 min\n" <<
-                 "Time left at work:  8 h 00 min\n",
+    assert_equal("Time spent working:   0 h 00 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    8 h 00 min\n",
                  @output.string)
   end
 end

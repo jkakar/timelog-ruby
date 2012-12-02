@@ -15,18 +15,26 @@ module Timelog
         description = activity[:description]
         output.puts("#{duration}   #{description}")
       end
-      time_spent = 0
+      time_working = 0
+      time_slacking = 0
       time_left = DAILY_WORK_HOURS
       unless activities.empty?
-        time_spent = activities.map do |activity|
+        time_working = activities.map do |activity|
           activity[:duration] unless activity[:description].end_with?('**')
         end
-        time_spent = time_spent.compact.reduce(:+)
-        time_left = [0, (8 * 60 * 60) - time_spent].max
+        time_working = time_working.compact.reduce(:+)
+
+        time_slacking = activities.map do |activity|
+          activity[:duration] if activity[:description].end_with?('**')
+        end
+        time_slacking = time_slacking.compact.reduce(:+) || 0
+
+        time_left = [0, (8 * 60 * 60) - time_working].max
         output.puts("\n")
       end
-      output.puts("Total work done:    #{format_duration(time_spent)}")
-      output.puts("Time left at work:  #{format_duration(time_left)}")
+      output.puts("Time spent working:   #{format_duration(time_working)}")
+      output.puts("Time spent slacking:  #{format_duration(time_slacking)}")
+      output.puts("Time left at work:    #{format_duration(time_left)}")
     end
 
     private

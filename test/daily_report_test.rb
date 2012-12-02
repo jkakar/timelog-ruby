@@ -22,8 +22,9 @@ class DailyReportTest < MiniTest::Unit::TestCase
   # without any activity information, when the timelog is empty.
   def test_render_without_activities
     Timelog::DailyReport.render(@timelog, @output)
-    assert_equal("Total work done:    0 h 00 min\n" <<
-                 "Time left at work:  8 h 00 min\n",
+    assert_equal("Time spent working:   0 h 00 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    8 h 00 min\n",
                  @output.string)
   end
 
@@ -44,8 +45,9 @@ class DailyReportTest < MiniTest::Unit::TestCase
     assert_equal("0 h 07 min   Reading mail\n" <<
                  "0 h 05 min   Writing a test\n" <<
                  "\n" <<
-                 "Total work done:    0 h 12 min\n" <<
-                 "Time left at work:  7 h 48 min\n",
+                 "Time spent working:   0 h 12 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    7 h 48 min\n",
                  @output.string)
   end
 
@@ -63,8 +65,9 @@ class DailyReportTest < MiniTest::Unit::TestCase
     assert_equal("0 h 12 min   Reading mail\n" <<
                  "0 h 05 min   Writing a test\n" <<
                  "\n" <<
-                 "Total work done:    0 h 17 min\n" <<
-                 "Time left at work:  7 h 43 min\n",
+                 "Time spent working:   0 h 17 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    7 h 43 min\n",
                  @output.string)
   end
 
@@ -78,8 +81,9 @@ class DailyReportTest < MiniTest::Unit::TestCase
     Timelog::DailyReport.render(@timelog, @output, Time.new(2012, 1, 31))
     assert_equal("8 h 01 min   Long walk by the beach\n" <<
                  "\n" <<
-                 "Total work done:    8 h 01 min\n" <<
-                 "Time left at work:  0 h 00 min\n",
+                 "Time spent working:   8 h 01 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    0 h 00 min\n",
                  @output.string)
   end
 
@@ -96,8 +100,9 @@ class DailyReportTest < MiniTest::Unit::TestCase
     assert_equal("1 h 07 min   Lunch **\n" <<
                  "0 h 05 min   Writing a test\n" <<
                  "\n" <<
-                 "Total work done:    0 h 05 min\n" <<
-                 "Time left at work:  7 h 55 min\n",
+                 "Time spent working:   0 h 05 min\n" <<
+                 "Time spent slacking:  1 h 07 min\n" <<
+                 "Time left at work:    7 h 55 min\n",
                  @output.string)
   end
 end
