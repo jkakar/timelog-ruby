@@ -3,6 +3,8 @@ require 'time'
 
 module Timelog
   module DailyReport
+    DAILY_WORK_HOURS = 8 * 60 * 60
+
     # Generate a report based on today's activities and write it to the output
     # stream.
     def self.render(timelog, output, today=nil)
@@ -14,14 +16,13 @@ module Timelog
         output.puts("#{duration}   #{description}")
       end
       time_spent = 0
-      time_left = (8 * 60 * 60)
+      time_left = DAILY_WORK_HOURS
       unless activities.empty?
-        time_spent = activities.map do |a|
-          a[:duration] unless a[:description].end_with?('**')
+        time_spent = activities.map do |activity|
+          activity[:duration] unless activity[:description].end_with?('**')
         end
         time_spent = time_spent.compact.reduce(:+)
-        time_left = (8 * 60 * 60) - time_spent
-        time_left = 0 if time_left < 0
+        time_left = [0, (8 * 60 * 60) - time_spent].max
         output.puts("\n")
       end
       output.puts("Total work done:    #{format_duration(time_spent)}")

@@ -226,7 +226,7 @@ class TimelogTest < MiniTest::Unit::TestCase
     assert_equal([{:start_time => Time.new(2012, 1, 31, 10, 52),
                     :end_time => Time.new(2012, 1, 31, 10, 59),
                     :description => 'Writing a test'},
-                 {:start_time => Time.new(2012, 2, 1, 11, 12),
+                  {:start_time => Time.new(2012, 2, 1, 11, 12),
                     :end_time => Time.new(2012, 2, 1, 12, 37),
                     :description => 'Reading mail'}],
                  timelog.activities)
