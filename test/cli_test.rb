@@ -40,6 +40,15 @@ class CLITest < MiniTest::Unit::TestCase
                  "Time left at work:    8 h 00 min\n",
                  @output.string)
   end
+
+  # Timeout::CLI#run ignores empty activity descriptions.
+  def test_run_with_empty_activity_description
+    @client.run("")
+    assert_equal("Time spent working:   0 h 00 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    8 h 00 min\n",
+                 @output.string)
+  end
 end
 
 
