@@ -10,6 +10,8 @@ module Timelog
 
     # Convert the usage error to a string that contains help information about
     # command-line arguments and options.
+    #
+    # @return [String] The usage text to display when help is requested.
     def to_s
       @option_parser.to_s
     end
@@ -52,12 +54,16 @@ module Timelog
     # @return [Array] An `[options, arguments]` 2-tuple parsed from the
     #   provided command-line arguments.
     def parse_command_line_options!(args)
-      OptionParser.new do |opts|
-        opts.on('-h', '--help', 'Display this screen') do
-          raise UsageError.new(opts)
+      options = {}
+      OptionParser.new do |parser|
+        parser.on('-h', '--help', 'Display this screen') do
+          raise UsageError.new(parser)
+        end
+        parser.on('-w', '--weekly', 'Display weekly report') do
+          options['report'] = 'weekly'
         end
       end.parse!(args)
-      return {}, args
+      return options, args
     end
   end
 end

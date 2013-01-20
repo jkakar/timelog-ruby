@@ -28,9 +28,9 @@ class LoadTimelogTest < MiniTest::Unit::TestCase
                   "2012-01-31 10:59: Writing a test\n")
     @stream.rewind
     timelog = Timelog.load_stream(@stream)
-    assert_equal([{:start_time => Time.new(2012, 1, 31, 10, 52),
-                    :end_time => Time.new(2012, 1, 31, 10, 59),
-                    :description => 'Writing a test'}],
+    assert_equal([{start_time: Time.new(2012, 1, 31, 10, 52),
+                   end_time: Time.new(2012, 1, 31, 10, 59),
+                   description: 'Writing a test'}],
                  timelog.activities)
   end
 
@@ -44,12 +44,12 @@ class LoadTimelogTest < MiniTest::Unit::TestCase
                   "2012-01-31 10:59: Writing another test\n")
     @stream.rewind
     timelog = Timelog.load_stream(@stream)
-    assert_equal([{:start_time => Time.new(2012, 1, 29, 23, 12),
-                    :end_time => Time.new(2012, 1, 29, 23, 18),
-                    :description => 'Writing a test'},
-                  {:start_time => Time.new(2012, 1, 31, 10, 52),
-                    :end_time => Time.new(2012, 1, 31, 10, 59),
-                    :description => 'Writing another test'}],
+    assert_equal([{start_time: Time.new(2012, 1, 29, 23, 12),
+                   end_time: Time.new(2012, 1, 29, 23, 18),
+                   description: 'Writing a test'},
+                  {start_time: Time.new(2012, 1, 31, 10, 52),
+                   end_time: Time.new(2012, 1, 31, 10, 59),
+                   description: 'Writing another test'}],
                  timelog.activities)
   end
 
@@ -104,8 +104,8 @@ class TimelogTest < MiniTest::Unit::TestCase
     timestamp2 = Time.new(2012, 1, 31, 10, 59)
     @timelog.record_activity('Reading mail', timestamp2)
     @stream.rewind
-    assert_equal([{:start_time => timestamp1, :end_time => timestamp2,
-                    :description => 'Reading mail'}],
+    assert_equal([{start_time: timestamp1,end_time: timestamp2,
+                   description: 'Reading mail'}],
                  @timelog.activities)
     assert_equal("2012-01-31 08:34: Arrived\n" <<
                  "2012-01-31 10:59: Reading mail\n",
@@ -122,9 +122,9 @@ class TimelogTest < MiniTest::Unit::TestCase
     today = Time.new(2012, 1, 31, 4) # Today at 4:00am
     @timelog.record_activity('Arrived', today)
     @stream.rewind
-    assert_equal([{:start_time => Time.new(2012, 1, 31, 3, 47),
-                    :end_time => Time.new(2012, 1, 31, 3, 59),
-                    :description => 'Writing a test'}],
+    assert_equal([{start_time: Time.new(2012, 1, 31, 3, 47),
+                   end_time: Time.new(2012, 1, 31, 3, 59),
+                   description: 'Writing a test'}],
                  @timelog.activities)
     assert_equal("2012-01-31 03:47: Arrived\n" <<
                  "2012-01-31 03:59: Writing a test\n" <<
@@ -143,9 +143,9 @@ class TimelogTest < MiniTest::Unit::TestCase
     today = Time.new(2012, 1, 31, 4) # Today at 4:00am
     @timelog.record_activity('Arrived', today)
     @stream.rewind
-    assert_equal([{:start_time => Time.new(2012, 1, 30, 20, 47),
-                    :end_time => Time.new(2012, 1, 30, 20, 59),
-                    :description => 'Writing a test'}],
+    assert_equal([{start_time: Time.new(2012, 1, 30, 20, 47),
+                   end_time: Time.new(2012, 1, 30, 20, 59),
+                   description: 'Writing a test'}],
                  @timelog.activities)
     assert_equal("2012-01-30 20:47: Arrived\n" <<
                  "2012-01-30 20:59: Writing a test\n" <<
@@ -200,9 +200,9 @@ class TimelogTest < MiniTest::Unit::TestCase
     now = Time.new(2012, 2, 1, 11, 12)
     timelog = Timelog.load_stream(@stream)
     timelog.record_activity("Arrived", now)
-    assert_equal([{:start_time => Time.new(2012, 1, 31, 10, 52),
-                    :end_time => Time.new(2012, 1, 31, 10, 59),
-                    :description => 'Writing a test'}],
+    assert_equal([{start_time: Time.new(2012, 1, 31, 10, 52),
+                   end_time: Time.new(2012, 1, 31, 10, 59),
+                   description: 'Writing a test'}],
                  timelog.activities)
     @stream.rewind
     assert_equal("2012-01-31 10:52: Arrived\n" <<
@@ -223,12 +223,12 @@ class TimelogTest < MiniTest::Unit::TestCase
     now = Time.new(2012, 2, 1, 12, 37)
     timelog = Timelog.load_stream(@stream)
     timelog.record_activity("Reading mail", now)
-    assert_equal([{:start_time => Time.new(2012, 1, 31, 10, 52),
-                    :end_time => Time.new(2012, 1, 31, 10, 59),
-                    :description => 'Writing a test'},
-                  {:start_time => Time.new(2012, 2, 1, 11, 12),
-                    :end_time => Time.new(2012, 2, 1, 12, 37),
-                    :description => 'Reading mail'}],
+    assert_equal([{start_time: Time.new(2012, 1, 31, 10, 52),
+                   end_time: Time.new(2012, 1, 31, 10, 59),
+                   description: 'Writing a test'},
+                  {start_time: Time.new(2012, 2, 1, 11, 12),
+                   end_time: Time.new(2012, 2, 1, 12, 37),
+                   description: 'Reading mail'}],
                  timelog.activities)
     @stream.rewind
     assert_equal("2012-01-31 10:52: Arrived\n" <<

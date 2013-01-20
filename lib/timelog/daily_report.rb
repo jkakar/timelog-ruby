@@ -59,8 +59,8 @@ module Timelog
         if (activity[:start_time].year == today.year &&
             activity[:start_time].month == today.month &&
             activity[:start_time].day == today.day)
-          {:duration => activity[:end_time] - activity[:start_time],
-           :description => activity[:description]}
+          {duration: activity[:end_time] - activity[:start_time],
+           description: activity[:description]}
         end
       end
 
@@ -79,7 +79,7 @@ module Timelog
       # Return a list of unique activities for the day.
       result = []
       activities.each do |description, duration|
-        result << {:duration => duration, :description => description}
+        result << {duration: duration, description: description}
       end
       result.sort_by { |activity| activity[:description] }
     end

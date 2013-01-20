@@ -11,8 +11,8 @@ class CLITest < MiniTest::Unit::TestCase
     @client = Timelog::CLI.new(@stream, @output)
   end
 
-  # Timeout::CLI#run writes the specified activity to the stream and prints
-  # the daily report to the screen.
+  # CLI.run writes the specified activity to the stream and prints the daily
+  # report to the screen.
   def test_run_with_first_activity
     @client.run('Writing a test')
     assert_match(/\d{4}-\d{2}-\d{2} \d{2}:\d{2}: Writing a test\n/,
@@ -23,15 +23,13 @@ class CLITest < MiniTest::Unit::TestCase
                  @output.string)
   end
 
-  # Timeout::CLI#run raises a UsageError if -h or --help arguments are
-  # specified.
+  # CLI.run raises a UsageError if -h or --help arguments are specified.
   def test_run_with_help_option
     assert_raises(Timelog::UsageError) { @client.run('-h') }
     assert_raises(Timelog::UsageError) { @client.run('--help') }
   end
 
-  # Timeout::CLI#run displays today's activities when no arguments are
-  # specified.
+  # CLI.run displays today's activities when no arguments are specified.
   def test_run_without_arguments
     @client.run
     assert_equal("Time spent working:   0 h 00 min\n" <<
@@ -40,7 +38,7 @@ class CLITest < MiniTest::Unit::TestCase
                  @output.string)
   end
 
-  # Timeout::CLI#run ignores empty activity descriptions.
+  # CLI.run ignores empty activity descriptions.
   def test_run_with_empty_activity_description
     @client.run("")
     assert_equal("Time spent working:   0 h 00 min\n" <<
@@ -48,10 +46,15 @@ class CLITest < MiniTest::Unit::TestCase
                  "Time left at work:    8 h 00 min\n",
                  @output.string)
   end
+
+  # CLI.run displays a weekly report when the -w command-line option is
+  # passed.
+  # def test_run_with_dash_w
+  # end
 end
 
 class UsageError < MiniTest::Unit::TestCase
-  # Converting a Timeout::UsageError to a string yield help text to display to
+  # Converting a Timelog::UsageError to a string yield help text to display to
   # a user.
   def test_to_s
     client = Timelog::CLI.new(StringIO.new, StringIO.new)
@@ -60,7 +63,8 @@ class UsageError < MiniTest::Unit::TestCase
     rescue Timelog::UsageError => error
       assert_equal(
         "Usage: turn [options]\n" <<
-        "    -h, --help                       Display this screen\n",
+        "    -h, --help                       Display this screen\n" <<
+        "    -w, --weekly                     Display weekly report\n",
         error.to_s)
     end
   end

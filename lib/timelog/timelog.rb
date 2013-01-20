@@ -39,8 +39,9 @@ module Timelog
         @next_start_time = end_time
         write_separator unless @activities.empty?
       else
-        @activities << {:start_time => start_time, :end_time => end_time,
-                        :description => description}
+        @activities << {start_time: start_time,
+                        end_time: end_time,
+                        description: description}
       end
       write_activity(end_time, description)
     end
@@ -134,8 +135,9 @@ module Timelog
         if start_time.nil?
           start_time = end_time
         else
-          activities << {:start_time => start_time, :end_time => end_time,
-                         :description => description}
+          activities << {start_time: start_time,
+                         end_time: end_time,
+                         description: description}
           start_time = end_time
         end
       end
