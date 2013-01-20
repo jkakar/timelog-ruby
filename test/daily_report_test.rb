@@ -2,9 +2,7 @@ require 'minitest/unit'
 require 'stringio'
 require 'time'
 
-require 'timelog/daily_report'
-require 'timelog/timelog'
-
+require 'timelog'
 
 class DailyReportTest < MiniTest::Unit::TestCase
   def setup
