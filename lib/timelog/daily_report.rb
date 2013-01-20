@@ -75,7 +75,7 @@ module Timelog
     def self.format_duration(seconds)
       hours = 0
       minutes = seconds / 60
-      if minutes > 60
+      if minutes > 59
         hours = minutes / 60
         minutes = minutes % 60
       end
