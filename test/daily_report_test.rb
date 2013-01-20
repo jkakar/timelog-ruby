@@ -105,4 +105,21 @@ class DailyReportTest < MiniTest::Unit::TestCase
                  "Time left at work:    7 h 55 min\n",
                  @output.string)
   end
+
+  # Timelog::DailyReport.render converts the minutes spent on an activity into
+  # a string like 'X h YY min'.  It correctly converts 60 minutes into '1 h 00
+  # min'.
+  def test_render_calculates_hour_boundary
+    today1 = Time.new(2012, 1, 31, 15) # Today at 3:00pm
+    @timelog.record_activity('Arrived', today1)
+    today2 = Time.new(2012, 1, 31, 16) # Today at 4:00pm
+    @timelog.record_activity('Writing a test', today2)
+    Timelog::DailyReport.render(@timelog, @output, Time.new(2012, 1, 31))
+    assert_equal("1 h 00 min   Writing a test\n" <<
+                 "\n" <<
+                 "Time spent working:   1 h 00 min\n" <<
+                 "Time spent slacking:  0 h 00 min\n" <<
+                 "Time left at work:    7 h 00 min\n",
+                 @output.string)
+  end
 end
