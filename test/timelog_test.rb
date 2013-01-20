@@ -3,7 +3,7 @@ require 'minitest/unit'
 require 'stringio'
 require 'tempfile'
 
-require 'timelog/timelog'
+require 'timelog'
 
 class LoadTimelogTest < MiniTest::Unit::TestCase
   def setup

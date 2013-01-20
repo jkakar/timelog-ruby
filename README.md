@@ -1,3 +1,5 @@
+# Timelog
+
 A command-line driven time-tracking tool inspired by GTimeLog.
 
 ## Usage
@@ -42,6 +44,25 @@ showing you what you've done, how many hours you've worked and how
 many hours you have left before the day is over.  Slacking activities
 aren't included in the totals.
 
+## Setting up a development environment
+
+Install dependencies and run the test suite:
+
+    bundle install --binstubs vendor/bin
+    rbenv rehash
+    rake
+
+Run tests:
+
+    rake test
+
+See tasks:
+
+    rake -T
+
+Generate API documentation:
+
+    rake yard
 
 ## License
 

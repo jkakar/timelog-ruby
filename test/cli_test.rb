@@ -2,8 +2,7 @@ require 'date'
 require 'minitest/unit'
 require 'stringio'
 
-require 'timelog/cli'
-
+require 'timelog'
 
 class CLITest < MiniTest::Unit::TestCase
   def setup
@@ -50,7 +49,6 @@ class CLITest < MiniTest::Unit::TestCase
                  @output.string)
   end
 end
-
 
 class UsageError < MiniTest::Unit::TestCase
   # Converting a Timeout::UsageError to a string yield help text to display to
