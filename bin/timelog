@@ -1,8 +1,7 @@
 #!/usr/bin/env ruby
 
 $:.unshift(File.expand_path(File.join(File.dirname($0), '../lib')))
-require 'timelog/cli'
-
+require 'timelog'
 
 stream = File.open(File.expand_path('~/.timelog.txt'), 'a+')
 stream.rewind
