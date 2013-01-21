@@ -46,11 +46,6 @@ class CLITest < MiniTest::Unit::TestCase
                  "Time left at work:    8 h 00 min\n",
                  @output.string)
   end
-
-  # CLI.run displays a weekly report when the -w command-line option is
-  # passed.
-  # def test_run_with_dash_w
-  # end
 end
 
 class UsageError < MiniTest::Unit::TestCase
