@@ -1,4 +1,5 @@
 require 'optparse'
+require 'timelog'
 
 module Timelog
   # Raised if usage text should be displayed.
